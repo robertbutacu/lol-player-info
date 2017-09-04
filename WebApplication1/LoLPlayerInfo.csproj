@@ -186,10 +186,11 @@
     <Compile Include="Models\ChampionDto.cs" />
     <Compile Include="Models\ChampionsListDto.cs" />
     <Compile Include="Models\MatchDto.cs" />
-    <Compile Include="Models\MatchEventDto.cs" />
-    <Compile Include="Models\MatchFrameDto.cs" />
-    <Compile Include="Models\MatchParticipantFrameDto.cs" />
-    <Compile Include="Models\MatchPositionDto.cs" />
+    <Compile Include="Models\ParticipantDto.cs" />
+    <Compile Include="Models\ParticipantIdentityDto.cs" />
+    <Compile Include="Models\ParticipantStatsDto.cs" />
+    <Compile Include="Models\ParticipantTimelineDto.cs" />
+    <Compile Include="Models\PlayerDto.cs" />
     <Compile Include="Models\SummonerDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

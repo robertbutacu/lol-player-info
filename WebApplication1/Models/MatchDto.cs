@@ -17,6 +17,6 @@ namespace WebApplication1.Models
         public List<ParticipantIdentityDto> participantsIdentities { get; set; }
 
         [JsonProperty("participants")]
-        public List<ParticipantIdentityDto> participants { get; set; }
+        public List<ParticipantDto> participants { get; set; }
     }
 }

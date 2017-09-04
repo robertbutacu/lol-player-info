@@ -12,6 +12,9 @@ namespace WebApplication1.Models
         [JsonProperty("participantId")]
         public int participantId { get; set; }
 
+        [JsonProperty("timeline")]
+        public ParticipantTimelineDto timeline { get; set; }
+
         [JsonProperty("championId")]
         public int championId { get; set; }
     }
