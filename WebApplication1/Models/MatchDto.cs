@@ -10,10 +10,13 @@ namespace WebApplication1.Models
     [DataContract]
     public class MatchDto
     {
-        [JsonProperty("events")]
-        public List<MatchFrameDto> events;
+        [JsonProperty("gameId")]
+        public long gameId { get; set; }
 
-        [JsonProperty("frameInterval")]
-        public long frameInterval { get; set; }
+        [JsonProperty("participantIdentities")]
+        public List<ParticipantIdentityDto> participantsIdentities { get; set; }
+
+        [JsonProperty("participants")]
+        public List<ParticipantIdentityDto> participants { get; set; }
     }
 }

@@ -16,8 +16,8 @@ namespace WebApplication1.Models
         [JsonProperty("name")]
         public string name { get; set; }
 
-        [JsonProperty("summonerLevel")]
-        public int summonerLevel { get; set; }
+        //[JsonProperty("summonerLevel")]
+        //public int summonerLevel { get; set; }
 
         [JsonProperty("accountId")]
         public long accountId { get; set; }
