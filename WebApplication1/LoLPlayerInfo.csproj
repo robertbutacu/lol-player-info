@@ -184,8 +184,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="LolAPIServices\Champions.cs" />
+    <Compile Include="LolAPIServices\Match.cs" />
+    <Compile Include="LolAPIServices\Summoner.cs" />
     <Compile Include="Models\ChampionDto.cs" />
     <Compile Include="Models\ChampionsListDto.cs" />
+    <Compile Include="Models\Globals.cs" />
     <Compile Include="Models\MatchDto.cs" />
     <Compile Include="Models\ParticipantDto.cs" />
     <Compile Include="Models\ParticipantIdentityDto.cs" />
