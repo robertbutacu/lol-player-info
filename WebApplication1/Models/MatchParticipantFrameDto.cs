@@ -28,13 +28,17 @@ namespace WebApplication1.Models
         [JsonProperty("minionsKilled")]
         public int minionsKilled { get; set; }
 
-        [JsonProperty]
+        [JsonProperty("dominionScore")]
+        public int dominionScore { get; set; }
 
-        [JsonProperty]
+        [JsonProperty("position")]
+        public MatchPositionDto position { get; set; }
 
-        [JsonProperty]
+        [JsonProperty("xp")]
+        public int xp { get; set; }
 
-        [JsonProperty]
+        [JsonProperty("jungleMinionsKilled"]
+        public int jungleMinionsKilled { get; set; }
 
     }
 }
