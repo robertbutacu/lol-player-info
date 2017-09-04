@@ -11,21 +11,21 @@ namespace WebApplication1.Models
     public class SummonerDto
     {
         [JsonProperty("profileIconId")]
-        public long profileIconId { get; }
+        public long profileIconId { get; set; }
 
         [JsonProperty("name")]
-        public string name { get; }
+        public string name { get; set; }
 
         [JsonProperty("summonerLevel")]
-        public int summonerLevel { get; }
+        public int summonerLevel { get; set; }
 
         [JsonProperty("accountId")]
-        public long accountId { get; }
+        public long accountId { get; set; }
 
         [JsonProperty("id")]
-        public long id{ get; }
+        public long id{ get; set; }
 
         [JsonProperty("revisionDate")]
-        public long revisionDate { get; }
+        public long revisionDate { get; set; }
     }
 }

@@ -11,12 +11,12 @@ namespace WebApplication1.Models
     public class ChampionsListDto
     {
         [JsonProperty("data")]
-        public Dictionary<String, ChampionDto> data { get; }
+        public Dictionary<String, ChampionDto> data { get; set; }
 
         [JsonProperty("type")]
-        public String type { get; }
+        public String type { get; set; }
 
         [JsonProperty("version")]
-        public String version { get; }
+        public String version { get; set; }
     }
 }

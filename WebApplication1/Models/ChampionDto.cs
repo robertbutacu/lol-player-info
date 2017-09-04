@@ -11,15 +11,15 @@ namespace WebApplication1.Models
     public class ChampionDto
     {
         [JsonProperty("id")]
-        public int id { get; }
+        public int id { get; set; }
 
         [JsonProperty("key")]
-        public String key { get; }
+        public String key { get; set; }
 
         [JsonProperty("name")]
-        public String name { get; }
+        public String name { get; set; }
 
         [JsonProperty("title")]
-        public String title { get; }
+        public String title { get; set; }
     }
 }

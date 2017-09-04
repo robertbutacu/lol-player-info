@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
                         System.Diagnostics.Debug.WriteLine(champion.Value.name);
                     }*/
                     System.Diagnostics.Debug.WriteLine("Done");
-                    System.Diagnostics.Debug.WriteLine(modelObject.name);
+                    //System.Diagnostics.Debug.WriteLine(modelObject.name);
                     return Ok(modelObject);
                 }
             }
