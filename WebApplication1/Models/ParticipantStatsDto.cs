@@ -7,14 +7,20 @@ namespace WebApplication1.Models
     [DataContract]
     public class ParticipantStatsDto
     {
-        [JsonProperty("totalDamageDealt")]
-        public long totalDamageDealt { get; set; }
+        [JsonProperty("totalDamageDealtToChampions")]
+        public long totalDamageDealtToChampions { get; set; }
 
         [JsonProperty("win")]
         public Boolean win { get; set; }
 
+        [JsonProperty("damageDealtToTurrets")]
+        public long damageDealtToTurrets { get; set; }
+
         [JsonProperty("kills")]
         public int kills { get; set; }
+
+        [JsonProperty("totalScoreRank")]
+        public int totalScoreRank { get; set; }
 
         [JsonProperty("deaths")]
         public int deaths { get; set; }

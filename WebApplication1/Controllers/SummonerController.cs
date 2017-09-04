@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
             client.BaseAddress = new Uri("https://eun1.api.riotgames.com");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = client.GetAsync($"/lol/summoner/v3/summoners/by-name/{summonerName}?locale=en_US&dataById=false&api_key=RGAPI-800a7ddf-58cf-4c31-96e9-2489c641bcbb").Result;
+            var response = client.GetAsync($"/lol/summoner/v3/summoners/by-name/{summonerName}?locale=en_US&dataById=false&api_key={Globals.API_KEY}").Result;
             if (response.IsSuccessStatusCode)
             {
                 string responseString = response.Content.ReadAsStringAsync().Result;
