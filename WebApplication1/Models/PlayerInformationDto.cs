@@ -7,13 +7,13 @@ using System.Web;
 namespace WebApplication1.Models
 {
     [DataContract]
-    public class PlayerInformation
+    public class PlayerInformationDto
     {
         [DataMember]
         public string name;
 
         [DataMember]
-        public Dictionary<string, int> lanesPlayed;
+        public Dictionary<string, int> lanesPlayedCount;
 
         [DataMember]
         public double averageCsPerMinute;
@@ -57,7 +57,7 @@ namespace WebApplication1.Models
         [DataMember]
         public int averageAssists;
 
-        public PlayerInformation(
+        public PlayerInformationDto(
             string name, Dictionary<string, int> lanesPlayed, double averageCsPerMinute, 
             double averageKda, int gamesFed, int gamesCarried, int gamesGotCarried, int averageDmgToChampions, 
             int averageDmgToTurrets, int averageDmgToChampionsEnemies, int averageDmgToTurretsEnemies, int averageDmgToTurretsTeammates, 
@@ -65,7 +65,7 @@ namespace WebApplication1.Models
             )
         {
             this.name = name;
-            this.lanesPlayed = lanesPlayed;
+            this.lanesPlayedCount = lanesPlayed;
             this.averageCsPerMinute = averageCsPerMinute;
             this.averageKda = averageKda;
             this.gamesFed = gamesFed;

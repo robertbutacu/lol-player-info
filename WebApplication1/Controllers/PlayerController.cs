@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
             var playerInformation = new PlayerInformationService().Get(summonerName, region);
 
             if (playerInformation == null)
-                return BadRequest();
+                return NotFound();
             else
                 return Ok(playerInformation);
         }
