@@ -8,7 +8,7 @@ namespace WebApplication1.Services
 {
     public class PlayerInformationService
     {
-        public PlayerInformation Get(string playerName)
+        public PlayerInformation Get(string playerName, string region)
         {
             return null;
         }
