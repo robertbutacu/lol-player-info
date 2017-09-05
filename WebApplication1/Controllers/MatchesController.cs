@@ -10,7 +10,7 @@ using WebApplication1.LolAPIServices;
 
 namespace WebApplication1.Controllers
 {
-    public class MatchController : ApiController
+    public class MatchesController : ApiController
     {
         public IHttpActionResult GetMatch([FromUri] long id, [FromUri] string region)
         {
@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
             
         }
 
-        public IHttpActionResult Get([FromUri] long accountId, [FromUri] string region)
+        public IHttpActionResult GetAllMatches([FromUri] long accountId, [FromUri] string region)
         {
             if (Array.IndexOf(Globals.REGIONS, region) != -1)
             {
