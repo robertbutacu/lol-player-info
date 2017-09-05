@@ -12,7 +12,7 @@ namespace WebApplication1.Controllers
 {
     public class MatchController : ApiController
     {
-        public IHttpActionResult Get([FromUri] long id, [FromUri] string region)
+        public IHttpActionResult GetMatch([FromUri] long id, [FromUri] string region)
         {
             if (Array.IndexOf(Globals.REGIONS, region) != -1)
             {
@@ -22,6 +22,17 @@ namespace WebApplication1.Controllers
             else
                 return BadRequest();
             
+        }
+
+        public IHttpActionResult Get([FromUri] long accountId, [FromUri] string region)
+        {
+            if (Array.IndexOf(Globals.REGIONS, region) != -1)
+            {
+                var matches = new Matches().Get(accountId, region);
+                return Ok(matches);
+            }
+            else
+                return BadRequest();
         }
     }
 }

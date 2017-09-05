@@ -186,11 +186,14 @@
     </Compile>
     <Compile Include="LolAPIServices\Champions.cs" />
     <Compile Include="LolAPIServices\Match.cs" />
+    <Compile Include="LolAPIServices\Matches.cs" />
+    <Compile Include="Models\MatchlistDto.cs" />
     <Compile Include="LolAPIServices\Summoner.cs" />
     <Compile Include="Models\ChampionDto.cs" />
     <Compile Include="Models\ChampionsListDto.cs" />
     <Compile Include="Models\Globals.cs" />
     <Compile Include="Models\MatchDto.cs" />
+    <Compile Include="Models\MatchReferenceDto.cs" />
     <Compile Include="Models\ParticipantDto.cs" />
     <Compile Include="Models\ParticipantIdentityDto.cs" />
     <Compile Include="Models\ParticipantStatsDto.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Models\PlayerInformation.cs" />
     <Compile Include="Models\SummonerDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\PlayerInformationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
