@@ -43,6 +43,17 @@ namespace WebApplication1.Services
             playerSummary.name = summoner.name;
             playerSummary.lanesPlayedCount = ComputeLanesPlayedCount(matchesHistory.matches);
 
+            var detailedGames = GetDetailedGames(matchesHistory.matches, region);
+
+            var playerScores = new PlayerScores();
+            playerScores.averageDeaths = ComputeAverageDeaths(detailedGames, summoner.accountId, matchesHistory.totalGames);
+            playerScores.averageAssists = ComputeAverageAssists(detailedGames, summoner.accountId, matchesHistory.totalGames);
+            playerScores.averageKills = ComputeAverageKills(detailedGames, summoner.accountId, matchesHistory.totalGames);
+            playerScores.averageKda = Math.Round((playerScores.averageKills + playerScores.averageAssists) / playerScores.averageDeaths,2);
+
+
+            playerSummary.playerScores = playerScores;
+
             return playerSummary;
         }
         /*
@@ -51,14 +62,15 @@ namespace WebApplication1.Services
             Games got carried -> 
          */
 
-        private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory)
+        private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory, string region)
         {
-            return null;
-        }
+            var detailedMatches = new List<MatchDto>();
+            matchHistory.ForEach(delegate (MatchReferenceDto match)
+            {
+                detailedMatches.Add(new Match().GetById(match.gameId, region));
+            });
 
-        private double ComputeAverageKda(List<MatchDto> matchHistory, long accountId)
-        {
-            return 0;
+            return detailedMatches;
         }
 
         private Dictionary<string, int> ComputeLanesPlayedCount(List<MatchReferenceDto> matchHistory)
@@ -83,19 +95,67 @@ namespace WebApplication1.Services
             return lanesPlayedCount;
         }
 
-        private double ComputeAverageKills(List<MatchDto> matchHistory, long accountId)
+        private double ComputeAverageKills(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
-            return 0;
+            int kills = 0;
+            matchHistory.ForEach(delegate (MatchDto match)
+            {
+                int participantId = 0;
+                match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
+                {
+                    if (participantIdentityDto.player.accountId == accountId)
+                        participantId = participantIdentityDto.participantId;
+                });
+                match.participants.ForEach(delegate (ParticipantDto participant)
+                {
+                    if (participant.participantId == participantId)
+                        kills += participant.stats.kills;
+                });
+            });
+
+            return Math.Round(System.Convert.ToDouble(kills) / System.Convert.ToDouble(numberOfGames) * 10, 2);
         }
 
-        private double ComputeAverageDeaths(List<MatchDto> matchHistory, long accountId)
+        private double ComputeAverageDeaths(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
-            return 0;
+            int deaths = 0;
+            matchHistory.ForEach(delegate (MatchDto match)
+            {
+                int participantId = 0;
+                match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
+                {
+                    if (participantIdentityDto.player.accountId == accountId)
+                        participantId = participantIdentityDto.participantId;
+                });
+                match.participants.ForEach(delegate (ParticipantDto participant)
+                {
+                    if (participant.participantId == participantId)
+                        deaths += participant.stats.deaths;
+                });
+            });
+
+            return Math.Round(System.Convert.ToDouble(deaths) / System.Convert.ToDouble(numberOfGames) * 10, 2);
         }
 
-        private double ComputeAverageAssists(List<MatchDto> matchHistory, long accountId)
+        private double ComputeAverageAssists(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
-            return 0;
+            int assists = 0;
+            matchHistory.ForEach(delegate (MatchDto match)
+            {
+                int participantId = 0;
+                match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
+                {
+                    if (participantIdentityDto.player.accountId == accountId)
+                        participantId = participantIdentityDto.participantId;
+                });
+                match.participants.ForEach(delegate (ParticipantDto participant)
+                {
+                    if (participant.participantId == participantId)
+                        assists += participant.stats.assists;
+                });
+            });
+            
+            return Math.Round(System.Convert.ToDouble(assists) / System.Convert.ToDouble(numberOfGames) * 10, 2);
         }
 
         private double ComputeAverageCsPerMin(List<MatchDto> matchHistory, long accountId)

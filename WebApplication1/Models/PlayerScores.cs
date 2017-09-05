@@ -12,13 +12,13 @@ namespace WebApplication1.Models
         public double averageKda;
 
         [DataMember]
-        public int averageKills;
+        public double averageKills;
 
         [DataMember]
-        public int averageDeaths;
+        public double averageDeaths;
 
         [DataMember]
-        public int averageAssists;
+        public double averageAssists;
 
         public PlayerScores()
         {
