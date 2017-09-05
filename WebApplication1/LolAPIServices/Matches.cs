@@ -8,9 +8,9 @@ using WebApplication1.Models;
 
 namespace WebApplication1.LolAPIServices
 {
-    public class Match
+    public class Matches
     {
-        public MatchDto GetById(long id, string region)
+        public MatchlistDto Get(long accountId, string region)
         {
             var client = new HttpClient();
 
@@ -19,12 +19,12 @@ namespace WebApplication1.LolAPIServices
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = client.GetAsync($"lol/match/v3/matches/{id}?api_key={Globals.API_KEY}").Result;
+            var response = client.GetAsync($"lol/match/v3/matchlists/by-account/{accountId}?beginIndex=0&endIndex=100&api_key={Globals.API_KEY}").Result;
 
             if (response.IsSuccessStatusCode)
             {
                 string responseString = response.Content.ReadAsStringAsync().Result;
-                var modelObject = response.Content.ReadAsAsync<MatchDto>().Result;
+                var modelObject = response.Content.ReadAsAsync<MatchlistDto>().Result;
 
                 return modelObject;
             }

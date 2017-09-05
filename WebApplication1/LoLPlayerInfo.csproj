@@ -196,6 +196,7 @@
     <Compile Include="Models\ParticipantStatsDto.cs" />
     <Compile Include="Models\ParticipantTimelineDto.cs" />
     <Compile Include="Models\PlayerDto.cs" />
+    <Compile Include="Models\PlayerInformation.cs" />
     <Compile Include="Models\SummonerDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
