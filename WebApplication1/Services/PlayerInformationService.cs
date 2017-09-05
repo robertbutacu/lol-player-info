@@ -30,10 +30,20 @@ namespace WebApplication1.Services
         public PlayerInformationDto Get(string summonerName, string region) 
         {
             SummonerDto summoner = new Summoner().GetByName(summonerName, region);
+            if (summoner == null)
+                return null;
+
             MatchlistDto matchesHistory = new Matches().Get(summoner.accountId, region);
 
-            
-            
+            if (matchesHistory == null)
+                return null;
+
+            var playerSummary =  new PlayerInformationDto();
+
+            playerSummary.name = summoner.name;
+            playerSummary.lanesPlayedCount = ComputeLanesPlayedCount(matchesHistory.matches);
+
+            return playerSummary;
         }
         /*
             Games carried     -> the player's dmg is the highest.
@@ -51,9 +61,26 @@ namespace WebApplication1.Services
             return 0;
         }
 
-        private Dictionary<string, int> ComputeLanesPlayedCount(List<MatchReferenceDto> matchHistory, long accountId)
+        private Dictionary<string, int> ComputeLanesPlayedCount(List<MatchReferenceDto> matchHistory)
         {
-            return null;
+            var lanesPlayedCount = new Dictionary<string, int>();
+            lanesPlayedCount.Add("MID", 0);
+            lanesPlayedCount.Add("JUNGLE", 0);
+            lanesPlayedCount.Add("TOP", 0);
+            lanesPlayedCount.Add("SUPPORT", 0);
+            lanesPlayedCount.Add("ADC", 0);
+
+            matchHistory.ForEach(delegate(MatchReferenceDto match)
+                {
+                if(match.lane == "BOTTOM" && match.role == "DUO_SUPPORT")
+                        lanesPlayedCount["SUPPORT"] += 1;
+                if(match.lane == "BOTTOM" && match.role != "DUO_SUPPORT")
+                        lanesPlayedCount["ADC"] +=1;
+                if (match.lane != "BOTTOM")
+                        lanesPlayedCount[match.lane] += 1;
+                });
+
+            return lanesPlayedCount;
         }
 
         private double ComputeAverageKills(List<MatchDto> matchHistory, long accountId)
