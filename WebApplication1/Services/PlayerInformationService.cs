@@ -156,7 +156,7 @@ namespace WebApplication1.Services
             return 0;
         }
 
-        private Tuple<double, double, double, double> ComputeMatchStatsByTeam(List<ParticipantDto> matchStats, int participantId, int teamId)
+        private Tuple<double, double, double, double> ComputeMatchStats(List<ParticipantDto> matchStats, int participantId, int teamId)
         {
             long dmgDealtToChampionsByTeammates = 0, dmgDealtToTurretsByTeammates = 0;
             long dmgDealtToChampionsByEnemies   = 0, dmgDealtToTurretsByEnemies  = 0;
