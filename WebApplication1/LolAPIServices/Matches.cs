@@ -19,7 +19,7 @@ namespace WebApplication1.LolAPIServices
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = client.GetAsync($"lol/match/v3/matchlists/by-account/{accountId}?beginIndex=0&endIndex=10&api_key={Globals.API_KEY}").Result;
+            var response = client.GetAsync($"lol/match/v3/matchlists/by-account/{accountId}?beginIndex=0&endIndex=3&api_key={Globals.API_KEY}").Result;
 
             if (response.IsSuccessStatusCode)
             {

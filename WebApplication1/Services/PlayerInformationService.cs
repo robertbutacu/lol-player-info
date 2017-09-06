@@ -34,7 +34,7 @@ namespace WebApplication1.Services
 
             var detailedGames = GetDetailedGames(matchesHistory.matches, region);
 
-            var averageStats = ComputeAverageStats(detailedGames, summoner.accountId, matchesHistory.totalGames);
+            var averageStats = ComputeAverageStats(detailedGames, summoner.accountId);
             var playerSummary = new PlayerInformationDto
             {
                 name = summoner.name,
@@ -49,9 +49,9 @@ namespace WebApplication1.Services
             return playerSummary;
         }
         /*
-            Games carried     -> the player's dmg is the highest.
+            Games carried     -> the player's dmg is the highest by a margin of 45% more than the next teammate
             Games fed         -> (kills + assists/0.70) / deaths < 1; 
-            Games got carried -> 
+            Games got carried -> fed and dmg is at least 30% less than the most dmg on the team
          */
 
         private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory, string region)
@@ -87,8 +87,10 @@ namespace WebApplication1.Services
             return lanesPlayedCount;
         }
 
-        private Tuple<PlayerScores, DamageDealt, DamageDealt, DamageDealt> ComputeAverageStats(List<MatchDto> matchHistory, long accountId, int numberOfGames)
+        private Tuple<PlayerScores, DamageDealt, DamageDealt, DamageDealt> ComputeAverageStats(List<MatchDto> matchHistory, long accountId)
         {
+            int totalGames = matchHistory.Count;
+
             PlayerScores playerScores = new PlayerScores();
             DamageDealt averageDamageByPlayer   = new DamageDealt();
             DamageDealt averageDamageByTeam     = new DamageDealt();
@@ -113,12 +115,19 @@ namespace WebApplication1.Services
                         averageDamageByPlayer.averageDmgToChampions += participant.stats.totalDamageDealtToChampions;
                         averageDamageByPlayer.averageDmgToTurrets   += participant.stats.damageDealtToTurrets;
                         teamId = participant.teamId;
-                    } 
+                    }
                 });
                 var damageStats = ComputeDamageStats(match.participants, participantId, teamId);
                 averageDamageByTeam     = damageStats.Item1;
                 averageDamageByEnemeies = damageStats.Item2;
             });
+
+            averageDamageByTeam     = normalizeDamage(averageDamageByTeam    , totalGames, true);
+            averageDamageByEnemeies = normalizeDamage(averageDamageByEnemeies, totalGames, false);
+
+
+            Math.Round(averageDamageByPlayer.averageDmgToChampions /= totalGames, 2);
+            Math.Round(averageDamageByPlayer.averageDmgToTurrets   /= totalGames, 2);
 
             return new Tuple<PlayerScores, DamageDealt, DamageDealt, DamageDealt>(
                 playerScores,
@@ -126,6 +135,16 @@ namespace WebApplication1.Services
                 averageDamageByTeam,
                 averageDamageByEnemeies
                 );
+        }
+
+        private DamageDealt normalizeDamage(DamageDealt damageDealt, int totalGames, Boolean isPlayerTeam)
+        {
+            int factor = isPlayerTeam ? 4 : 5;
+
+            Math.Round(damageDealt.averageDmgToChampions /= (factor * totalGames), 2);
+            Math.Round(damageDealt.averageDmgToTurrets /= (factor * totalGames), 2);
+
+            return damageDealt;
         }
 
         private double ComputeAverageCsPerMin(List<MatchDto> matchHistory, long accountId)
