@@ -10,10 +10,7 @@ namespace WebApplication1.Services
     public class PlayerInformationService
     {
             /*
-            name - checked
-            lanesPlayed 
             averageCsPerMinute
-            averageKda
             gamesFed
             gamesCarried
             gamesGotCarried
@@ -23,9 +20,6 @@ namespace WebApplication1.Services
             averageDmgToTurretsEnemies
             averageDmgToTurretsTeammates
             averageDmgToChampionsTeammates
-            averageKills
-            averageDeaths
-            averageAssists
             */
         public PlayerInformationDto Get(string summonerName, string region) 
         {
@@ -61,7 +55,7 @@ namespace WebApplication1.Services
         private PlayerScores GetPlayerScores(List<MatchDto> detailedGames, long accountId, int totalGames)
         {
             var playerScores = new PlayerScores();
-            var scores = ComputePlayerScores(detailedGames, accountId, totalGames);
+            var scores = ComputeMatchStatsByPlayer(detailedGames, accountId, totalGames);
 
             playerScores.averageKills = scores.Item1;
             playerScores.averageDeaths = scores.Item2;
@@ -105,12 +99,16 @@ namespace WebApplication1.Services
             return lanesPlayedCount;
         }
 
-        private Tuple<double, double, double> ComputePlayerScores(List<MatchDto> matchHistory, long accountId, int numberOfGames)
+        private Tuple<double, double, double> ComputeMatchStatsByPlayer(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
             int kills = 0, deaths = 0, assists = 0;
+            long totalDamageToChampions = 0, totalDamageToTurrets = 0;
+            long totalDamageDealtToChampionsByEnemies   = 0  , totalDamageDealtToTurretsByEnemies   = 0;
+            long totalDamageDealtToChampionsByTeammates = 0, totalDamageDealtToTurretsByTeammates = 0; 
             matchHistory.ForEach(delegate (MatchDto match)
             {
                 int participantId = 0;
+                int teamId = 0;
                 match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
                 {
                     if (participantIdentityDto.player.accountId == accountId)
@@ -123,8 +121,12 @@ namespace WebApplication1.Services
                         kills   += participant.stats.kills;
                         deaths  += participant.stats.deaths;
                         assists += participant.stats.assists;
+                        totalDamageToChampions += participant.stats.totalDamageDealtToChampions;
+                        totalDamageToTurrets   += participant.stats.damageDealtToTurrets;
+                        teamId = participant.teamId;
                     } 
                 });
+
             });
 
             return new Tuple<double, double, double>(
@@ -154,25 +156,28 @@ namespace WebApplication1.Services
             return 0;
         }
 
-        private int ComputeAverageDmgToChampions(List<MatchDto> matchHistory, long accountId)
+        private Tuple<double, double, double, double> ComputeMatchStatsByTeam(List<ParticipantDto> matchStats, int participantId, int teamId)
         {
-            return 0;
-        }
+            long dmgDealtToChampionsByTeammates = 0, dmgDealtToTurretsByTeammates = 0;
+            long dmgDealtToChampionsByEnemies   = 0, dmgDealtToTurretsByEnemies  = 0;
 
-        private int ComputeAverageDmgToTurrets(List<MatchDto> matchHistory, long accountId)
-        {
-            return 0;
+            matchStats.ForEach(delegate (ParticipantDto participant)
+            {
+                if (participant.teamId == teamId && participant.participantId != participantId)
+                {
+                    dmgDealtToChampionsByTeammates += participant.stats.totalDamageDealtToChampions;
+                    dmgDealtToTurretsByTeammates += participant.stats.damageDealtToTurrets;
+                }
+                else
+                {
+                    dmgDealtToChampionsByEnemies += participant.stats.totalDamageDealtToChampions;
+                    dmgDealtToTurretsByEnemies += participant.stats.damageDealtToTurrets;
+                }
+            });
 
-        }
-
-        private int ComputeAverageDmgToChampionsByTeam(List<MatchDto> matchHistory, long accountId, int teamId)
-        {
-            return 0;
-        }
-
-        private int ComputeAverageDmgToTurretsByTeam(List<MatchDto> matchHistory, long accountId, int teamId)
-        {
-            return 0;
+            return new Tuple<double, double, double, double>(dmgDealtToChampionsByTeammates, dmgDealtToTurretsByTeammates,
+                                                             dmgDealtToChampionsByEnemies, dmgDealtToTurretsByEnemies
+                                                            );
         }
     }
 }
