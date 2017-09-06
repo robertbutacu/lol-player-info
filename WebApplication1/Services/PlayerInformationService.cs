@@ -10,16 +10,9 @@ namespace WebApplication1.Services
     public class PlayerInformationService
     {
             /*
-            averageCsPerMinute
             gamesFed
             gamesCarried
             gamesGotCarried
-            averageDmgToChampions
-            averageDmgToTurrets
-            averageDmgToChampionsEnemies
-            averageDmgToTurretsEnemies
-            averageDmgToTurretsTeammates
-            averageDmgToChampionsTeammates
             */
         public PlayerInformationDto Get(string summonerName, string region) 
         {
@@ -38,7 +31,7 @@ namespace WebApplication1.Services
             var playerSummary = new PlayerInformationDto
             {
                 name = summoner.name,
-                lanesPlayedCount = ComputeLanesPlayedCount(matchesHistory.matches),
+                lanesPlayedCount = new LanesService().ComputeLanesPlayedCount(matchesHistory.matches),
 
                 playerScores = averageStats.Item1,
                 damageDealt = averageStats.Item2,
@@ -65,27 +58,7 @@ namespace WebApplication1.Services
             return detailedMatches;
         }
 
-        private Dictionary<string, int> ComputeLanesPlayedCount(List<MatchReferenceDto> matchHistory)
-        {
-            var lanesPlayedCount = new Dictionary<string, int>();
-            lanesPlayedCount.Add("MID", 0);
-            lanesPlayedCount.Add("JUNGLE", 0);
-            lanesPlayedCount.Add("TOP", 0);
-            lanesPlayedCount.Add("SUPPORT", 0);
-            lanesPlayedCount.Add("ADC", 0);
 
-            matchHistory.ForEach(delegate(MatchReferenceDto match)
-                {
-                if(match.lane == "BOTTOM" && match.role == "DUO_SUPPORT")
-                        lanesPlayedCount["SUPPORT"] += 1;
-                if(match.lane == "BOTTOM" && match.role != "DUO_SUPPORT")
-                        lanesPlayedCount["ADC"] +=1;
-                if (match.lane != "BOTTOM")
-                        lanesPlayedCount[match.lane] += 1;
-                });
-
-            return lanesPlayedCount;
-        }
 
         private Tuple<PlayerScores, DamageDealt, DamageDealt, DamageDealt> ComputeAverageStats(List<MatchDto> matchHistory, long accountId)
         {
