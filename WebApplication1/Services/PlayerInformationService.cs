@@ -39,10 +39,27 @@ namespace WebApplication1.Services
 
             var detailedGames = GetDetailedGames(matchesHistory.matches, region);
 
-            var playerScores = GetPlayerScores(detailedGames, summoner.accountId, matchesHistory.totalGames);
+            var averageStats = ComputeAverageStats(detailedGames, summoner.accountId, matchesHistory.totalGames);
 
+            var playerScores = GetPlayerScores(averageStats.Item1.Item1, averageStats.Item1.Item2, averageStats.Item1.Item3);
 
-            playerSummary.playerScores = playerScores;
+            DamageDealt averageDamageByEnemies   = new DamageDealt();
+            DamageDealt averageDamageByTeammates = new DamageDealt();
+            DamageDealt averageDamageByPlayer    = new DamageDealt();
+
+            averageDamageByPlayer.averageDmgToChampions = averageStats.Item2;
+            averageDamageByPlayer.averageDmgToTurrets   = averageStats.Item3;
+
+            averageDamageByTeammates.averageDmgToChampions = averageStats.Item4;
+            averageDamageByTeammates.averageDmgToTurrets   = averageStats.Item5;
+
+            averageDamageByEnemies.averageDmgToChampions = averageStats.Item6;
+            averageDamageByEnemies.averageDmgToTurrets   = averageStats.Item7;
+
+            playerSummary.playerScores           = playerScores;
+            playerSummary.damageDealtByEnemies   = averageDamageByEnemies;
+            playerSummary.damageDealtByTeammates = averageDamageByTeammates;
+            playerSummary.damageDealt            = averageDamageByPlayer;
 
             return playerSummary;
         }
@@ -52,14 +69,13 @@ namespace WebApplication1.Services
             Games got carried -> 
          */
 
-        private PlayerScores GetPlayerScores(List<MatchDto> detailedGames, long accountId, int totalGames)
+        private PlayerScores GetPlayerScores(double kills, double deaths, double assists)
         {
             var playerScores = new PlayerScores();
-            var scores = ComputeMatchStatsByPlayer(detailedGames, accountId, totalGames);
 
-            playerScores.averageKills = scores.Item1;
-            playerScores.averageDeaths = scores.Item2;
-            playerScores.averageAssists = scores.Item3;
+            playerScores.averageKills = kills;
+            playerScores.averageDeaths = deaths;
+            playerScores.averageAssists = assists;
 
             playerScores.averageKda = Math.Round((playerScores.averageKills + playerScores.averageAssists) / playerScores.averageDeaths, 2);
 
@@ -99,7 +115,7 @@ namespace WebApplication1.Services
             return lanesPlayedCount;
         }
 
-        private Tuple<double, double, double> ComputeMatchStatsByPlayer(List<MatchDto> matchHistory, long accountId, int numberOfGames)
+        private Tuple<Tuple<double, double, double>, double, double, double, double, double, double> ComputeAverageStats(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
             int kills = 0, deaths = 0, assists = 0;
             long totalDamageToChampions = 0, totalDamageToTurrets = 0;
@@ -126,13 +142,23 @@ namespace WebApplication1.Services
                         teamId = participant.teamId;
                     } 
                 });
-
+                var gameStats = ComputeMatchStats(match.participants, participantId, teamId);
+                totalDamageDealtToChampionsByTeammates += gameStats.Item1;
+                totalDamageDealtToTurretsByTeammates   += gameStats.Item2;
+                totalDamageDealtToChampionsByEnemies   += gameStats.Item3;
+                totalDamageDealtToTurretsByEnemies     += gameStats.Item4;
             });
 
-            return new Tuple<double, double, double>(
-                Math.Round(System.Convert.ToDouble(kills)   / System.Convert.ToDouble(numberOfGames) * 10, 2),
-                Math.Round(System.Convert.ToDouble(deaths)  / System.Convert.ToDouble(numberOfGames) * 10, 2),
-                Math.Round(System.Convert.ToDouble(assists) / System.Convert.ToDouble(numberOfGames) * 10, 2)
+            return new Tuple<Tuple<double, double, double>, double, double, double, double, double, double>(
+                new Tuple<double, double, double>(Math.Round(System.Convert.ToDouble(kills) / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                                                  Math.Round(System.Convert.ToDouble(deaths) / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                                                  Math.Round(System.Convert.ToDouble(assists) / System.Convert.ToDouble(numberOfGames) * 10, 2)),
+                Math.Round(System.Convert.ToDouble(totalDamageToChampions) / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(totalDamageToTurrets)   / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(totalDamageDealtToChampionsByTeammates) / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(totalDamageDealtToTurretsByTeammates)   / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(totalDamageDealtToChampionsByEnemies)   / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(totalDamageDealtToTurretsByEnemies)     / System.Convert.ToDouble(numberOfGames) * 10, 2)
                 );
         }
 
@@ -156,7 +182,7 @@ namespace WebApplication1.Services
             return 0;
         }
 
-        private Tuple<double, double, double, double> ComputeMatchStats(List<ParticipantDto> matchStats, int participantId, int teamId)
+        private Tuple<long, long, long, long> ComputeMatchStats(List<ParticipantDto> matchStats, int participantId, int teamId)
         {
             long dmgDealtToChampionsByTeammates = 0, dmgDealtToTurretsByTeammates = 0;
             long dmgDealtToChampionsByEnemies   = 0, dmgDealtToTurretsByEnemies  = 0;
@@ -175,7 +201,7 @@ namespace WebApplication1.Services
                 }
             });
 
-            return new Tuple<double, double, double, double>(dmgDealtToChampionsByTeammates, dmgDealtToTurretsByTeammates,
+            return new Tuple<long, long, long, long>(dmgDealtToChampionsByTeammates, dmgDealtToTurretsByTeammates,
                                                              dmgDealtToChampionsByEnemies, dmgDealtToTurretsByEnemies
                                                             );
         }

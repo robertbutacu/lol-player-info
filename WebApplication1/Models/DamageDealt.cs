@@ -6,10 +6,10 @@ namespace WebApplication1.Models
     public class DamageDealt
     {
         [DataMember]
-        public int averageDmgToChampions;
+        public double averageDmgToChampions;
 
         [DataMember]
-        public int averageDmgToTurrets;
+        public double averageDmgToTurrets;
 
         public DamageDealt() { }
     }
