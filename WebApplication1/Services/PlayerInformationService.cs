@@ -45,11 +45,7 @@ namespace WebApplication1.Services
 
             var detailedGames = GetDetailedGames(matchesHistory.matches, region);
 
-            var playerScores = new PlayerScores();
-            playerScores.averageDeaths = ComputeAverageDeaths(detailedGames, summoner.accountId, matchesHistory.totalGames);
-            playerScores.averageAssists = ComputeAverageAssists(detailedGames, summoner.accountId, matchesHistory.totalGames);
-            playerScores.averageKills = ComputeAverageKills(detailedGames, summoner.accountId, matchesHistory.totalGames);
-            playerScores.averageKda = Math.Round((playerScores.averageKills + playerScores.averageAssists) / playerScores.averageDeaths,2);
+            var playerScores = GetPlayerScores(detailedGames, summoner.accountId, matchesHistory.totalGames);
 
 
             playerSummary.playerScores = playerScores;
@@ -61,6 +57,20 @@ namespace WebApplication1.Services
             Games fed         -> (kills + assists/0.70) / deaths < 1; 
             Games got carried -> 
          */
+
+        private PlayerScores GetPlayerScores(List<MatchDto> detailedGames, long accountId, int totalGames)
+        {
+            var playerScores = new PlayerScores();
+            var scores = ComputePlayerScores(detailedGames, accountId, totalGames);
+
+            playerScores.averageKills = scores.Item1;
+            playerScores.averageDeaths = scores.Item2;
+            playerScores.averageAssists = scores.Item3;
+
+            playerScores.averageKda = Math.Round((playerScores.averageKills + playerScores.averageAssists) / playerScores.averageDeaths, 2);
+
+            return playerScores;
+        }
 
         private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory, string region)
         {
@@ -95,9 +105,9 @@ namespace WebApplication1.Services
             return lanesPlayedCount;
         }
 
-        private double ComputeAverageKills(List<MatchDto> matchHistory, long accountId, int numberOfGames)
+        private Tuple<double, double, double> ComputePlayerScores(List<MatchDto> matchHistory, long accountId, int numberOfGames)
         {
-            int kills = 0;
+            int kills = 0, deaths = 0, assists = 0;
             matchHistory.ForEach(delegate (MatchDto match)
             {
                 int participantId = 0;
@@ -109,53 +119,19 @@ namespace WebApplication1.Services
                 match.participants.ForEach(delegate (ParticipantDto participant)
                 {
                     if (participant.participantId == participantId)
-                        kills += participant.stats.kills;
-                });
-            });
-
-            return Math.Round(System.Convert.ToDouble(kills) / System.Convert.ToDouble(numberOfGames) * 10, 2);
-        }
-
-        private double ComputeAverageDeaths(List<MatchDto> matchHistory, long accountId, int numberOfGames)
-        {
-            int deaths = 0;
-            matchHistory.ForEach(delegate (MatchDto match)
-            {
-                int participantId = 0;
-                match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
-                {
-                    if (participantIdentityDto.player.accountId == accountId)
-                        participantId = participantIdentityDto.participantId;
-                });
-                match.participants.ForEach(delegate (ParticipantDto participant)
-                {
-                    if (participant.participantId == participantId)
-                        deaths += participant.stats.deaths;
-                });
-            });
-
-            return Math.Round(System.Convert.ToDouble(deaths) / System.Convert.ToDouble(numberOfGames) * 10, 2);
-        }
-
-        private double ComputeAverageAssists(List<MatchDto> matchHistory, long accountId, int numberOfGames)
-        {
-            int assists = 0;
-            matchHistory.ForEach(delegate (MatchDto match)
-            {
-                int participantId = 0;
-                match.participantsIdentities.ForEach(delegate (ParticipantIdentityDto participantIdentityDto)
-                {
-                    if (participantIdentityDto.player.accountId == accountId)
-                        participantId = participantIdentityDto.participantId;
-                });
-                match.participants.ForEach(delegate (ParticipantDto participant)
-                {
-                    if (participant.participantId == participantId)
+                    {
+                        kills   += participant.stats.kills;
+                        deaths  += participant.stats.deaths;
                         assists += participant.stats.assists;
+                    } 
                 });
             });
-            
-            return Math.Round(System.Convert.ToDouble(assists) / System.Convert.ToDouble(numberOfGames) * 10, 2);
+
+            return new Tuple<double, double, double>(
+                Math.Round(System.Convert.ToDouble(kills)   / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(deaths)  / System.Convert.ToDouble(numberOfGames) * 10, 2),
+                Math.Round(System.Convert.ToDouble(assists) / System.Convert.ToDouble(numberOfGames) * 10, 2)
+                );
         }
 
         private double ComputeAverageCsPerMin(List<MatchDto> matchHistory, long accountId)
