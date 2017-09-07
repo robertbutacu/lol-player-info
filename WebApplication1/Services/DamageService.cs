@@ -64,11 +64,11 @@ namespace WebApplication1.Services
             DamageDealt highestInTeam = new DamageDealt();
             participants.ForEach(delegate (ParticipantDto participant)
             {
-                if (participant.stats.totalDamageDealtToChampions > highestInTeam.averageDmgToChampions &&
-                    participant.participantId != participantId &&
-                    participant.teamId == teamId)
-                    highestInTeam.ReplaceDamage(participant.stats.totalDamageDealtToChampions,
-                                                participant.stats.damageDealtToTurrets);
+                if ((participant.stats.totalDamageDealtToChampions > highestInTeam.averageDmgToChampions) &&
+                    (participant.participantId != participantId) &&
+                    (participant.teamId == teamId))
+                        highestInTeam.ReplaceDamage(participant.stats.totalDamageDealtToChampions,
+                                                    participant.stats.damageDealtToTurrets);
             });
 
             return highestInTeam;

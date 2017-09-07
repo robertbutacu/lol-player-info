@@ -34,7 +34,7 @@ namespace WebApplication1.Services
                 playerScores.ReplaceScores(scoreService.GetPlayerScoresForCurrentMatch(match.participants, participantId));
 
                 byPlayer.ReplaceDamage(damageService.ComputeDamageDealtByPlayer(match.participants, participantId));
-                highestInTeam.ReplaceDamage(damageService.GetHighestDamageDealerInTeam(match.participants, participantId, teamId));
+                highestInTeam.ReplaceDamage(damageService.GetHighestDamageDealerInTeam(match.participants, teamId, participantId));
                 gamesSummary.Add(
                     HasCarried(byPlayer, highestInTeam, hasWon) ? 1 : 0,
                     HasFed(playerScores) ? 1 : 0,
@@ -72,6 +72,10 @@ namespace WebApplication1.Services
 
         private Boolean HasGottenCarried(PlayerScores playerScores, DamageDealt byPlayer, DamageDealt highestInTeam, Boolean hasWon)
         {
+            if (hasWon &&
+                !HasFed(playerScores) &&
+                (byPlayer.averageDmgToChampions * 1.30 < highestInTeam.averageDmgToChampions))
+                System.Diagnostics.Debug.WriteLine("Got carried in " + byPlayer.averageDmgToChampions + " " + highestInTeam.averageDmgToChampions);
             return hasWon && 
                 !HasFed(playerScores) && 
                 (byPlayer.averageDmgToChampions * 1.30 < highestInTeam.averageDmgToChampions);
