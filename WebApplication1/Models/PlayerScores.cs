@@ -10,6 +10,9 @@ namespace WebApplication1.Models
         public double averageCsPerMinute { get; set; } = 0;
 
         [DataMember]
+        public double averageCreeps { get; set; } = 0;
+
+        [DataMember]
         public double averageKda { get; set; } = 0;
 
         [DataMember]

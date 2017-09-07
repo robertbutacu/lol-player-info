@@ -12,13 +12,9 @@ namespace WebApplication1.Services
         {
             PlayerScores playerScores = ComputePlayerKDA(matches, accountId);
 
-            /*playerScores.averageAssists = scores.averageAssists;
-            playerScores.averageDeaths = scores.averageDeaths;
-            playerScores.averageKills = scores.averageKills;
-            */
-            playerScores.averageKda = ComputeAverageKda(playerScores);
-
-
+            playerScores.averageKda         = ComputeAverageKda(playerScores);
+            playerScores.averageCsPerMinute = ComputeAverageCreeps(matches, accountId);
+            playerScores.averageCreeps      = ComputeAverageCreepsCount(matches, accountId);
             return playerScores;
         }
 
@@ -26,6 +22,7 @@ namespace WebApplication1.Services
         {
             return Math.Round((playerScores.averageKills + playerScores.averageAssists) / playerScores.averageDeaths, 2);
         }
+
 
         private PlayerScores ComputePlayerKDA(List<MatchDto> matches, long accountId)
         {
@@ -75,7 +72,56 @@ namespace WebApplication1.Services
 
         private double ComputeAverageCreeps(List<MatchDto> matches, long accountId)
         {
-            return 0;
+            double averageCs = 0;
+
+            matches.ForEach(delegate (MatchDto match)
+            {
+                int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
+                averageCs += ComputeAverageCSForCurrentMatch(match.participants, participantId);
+            });
+
+            return Math.Round(averageCs / matches.Count, 2);
+        }
+
+        private double ComputeAverageCreepsCount(List<MatchDto> matches, long accountId)
+        {
+            double averageCsCount = 0;
+
+            matches.ForEach(delegate (MatchDto match)
+            {
+                int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
+                averageCsCount += GetCsForCurrentMatch(match.participants, participantId);
+            });
+
+            return Math.Round(averageCsCount / matches.Count, 2);
+        }
+
+        private double GetCsForCurrentMatch(List<ParticipantDto> participants, int participantId)
+        {
+            double cs = 0;
+
+            participants.ForEach(delegate (ParticipantDto participant)
+            {
+                if (participant.participantId == participantId)
+                    cs = participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled;
+            });
+
+            System.Diagnostics.Debug.WriteLine("CS for current game " + cs);
+            return cs;
+        }
+
+        private double ComputeAverageCSForCurrentMatch(List<ParticipantDto> participants, int participantId)
+        {
+            double cs = 0;
+            participants.ForEach(delegate (ParticipantDto participant)
+            {
+                if(participant.participantId == participantId)
+                {
+                    cs = participant.timeline.creepsPerMinDeltas.Values.Average();
+                }
+            });
+
+            return cs;
         }
     }
 }

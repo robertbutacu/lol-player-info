@@ -25,6 +25,9 @@ namespace WebApplication1.Models
         [JsonProperty("deaths")]
         public int deaths { get; set; }
 
+        [JsonProperty("neutralMinionsKilled")]
+        public int neutralMinionsKilled { get; set; }
+
         [JsonProperty("assists")]
         public int assists { get; set; }
 
