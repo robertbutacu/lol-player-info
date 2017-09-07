@@ -52,7 +52,7 @@ namespace WebApplication1.Services
 
             participants.ForEach(delegate (ParticipantDto participant)
             {
-                if(participant.participantId == participantId)
+                if (participant.participantId == participantId)
                     dmg.Add(participant.stats.totalDamageDealtToChampions, participant.stats.damageDealtToTurrets);
             });
 

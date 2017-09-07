@@ -59,7 +59,7 @@ namespace WebApplication1.Services
             participantIdentities.ForEach(delegate (ParticipantIdentityDto participant)
             {
                 if (participant.player.accountId == accountId)
-                    participantId =  participant.participantId;
+                    participantId = participant.participantId;
             });
 
             return participantId;
@@ -72,7 +72,7 @@ namespace WebApplication1.Services
             matches.ForEach(delegate (MatchDto match)
             {
                 int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
-                averageCs += ComputeAverageCSForCurrentMatch(match.participants, participantId);
+                averageCs        += ComputeAverageCSForCurrentMatch(match.participants, participantId);
             });
 
             return Math.Round(averageCs / matches.Count, 2);
@@ -85,7 +85,7 @@ namespace WebApplication1.Services
             matches.ForEach(delegate (MatchDto match)
             {
                 int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
-                averageCsCount += GetCsForCurrentMatch(match.participants, participantId);
+                averageCsCount   += GetCsForCurrentMatch(match.participants, participantId);
             });
 
             return Math.Round(averageCsCount / matches.Count, 2);
@@ -110,9 +110,7 @@ namespace WebApplication1.Services
             participants.ForEach(delegate (ParticipantDto participant)
             {
                 if(participant.participantId == participantId)
-                {
                     cs = participant.timeline.creepsPerMinDeltas.Values.Average();
-                }
             });
 
             return cs;
