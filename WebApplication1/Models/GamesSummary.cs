@@ -15,5 +15,12 @@ namespace WebApplication1.Models
         public int gamesGotCarried;
 
         public GamesSummary() { }
+
+        public void Add(GamesSummary gamesSummary)
+        {
+            this.gamesFed        += gamesSummary.gamesFed;
+            this.gamesCarried    += gamesSummary.gamesCarried;
+            this.gamesGotCarried += gamesSummary.gamesGotCarried;
+        }
     }
 }

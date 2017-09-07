@@ -30,7 +30,7 @@ namespace WebApplication1.Services
 
             matches.ForEach(delegate (MatchDto match)
             {
-                int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
+                int participantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
 
                 playerScores.AddScores(GetPlayerScoresForCurrentMatch(match.participants, participantId));
             });
@@ -53,17 +53,6 @@ namespace WebApplication1.Services
             return playerScores;
         }
 
-        private int GetParticipantIdForCurrentMatch(List<ParticipantIdentityDto> participantIdentities, long accountId)
-        {
-            int participantId = 0;
-            participantIdentities.ForEach(delegate (ParticipantIdentityDto participant)
-            {
-                if (participant.player.accountId == accountId)
-                    participantId = participant.participantId;
-            });
-
-            return participantId;
-        }
 
         private double ComputeAverageCreeps(List<MatchDto> matches, long accountId)
         {
@@ -71,7 +60,7 @@ namespace WebApplication1.Services
 
             matches.ForEach(delegate (MatchDto match)
             {
-                int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
+                int participantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
                 averageCs        += ComputeAverageCSForCurrentMatch(match.participants, participantId);
             });
 
@@ -84,7 +73,7 @@ namespace WebApplication1.Services
 
             matches.ForEach(delegate (MatchDto match)
             {
-                int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
+                int participantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
                 averageCsCount   += GetCsForCurrentMatch(match.participants, participantId);
             });
 

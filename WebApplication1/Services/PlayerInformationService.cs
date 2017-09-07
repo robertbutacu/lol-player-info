@@ -40,11 +40,6 @@ namespace WebApplication1.Services
 
             return playerSummary;
         }
-        /*
-            Games carried     -> the player's dmg is the highest by a margin of 45% more than the next teammate
-            Games fed         -> (kills + assists/0.70) / deaths < 1; 
-            Games got carried -> fed and dmg is at least 30% less than the most dmg on the team
-         */
 
         private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory, string region)
         {

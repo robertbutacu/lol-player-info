@@ -210,6 +210,7 @@
     <Compile Include="Services\GamesSummaryService.cs" />
     <Compile Include="Services\LanesService.cs" />
     <Compile Include="Services\PlayerInformationService.cs" />
+    <Compile Include="Services\Retrieve.cs" />
     <Compile Include="Services\ScoreService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,9 +14,9 @@ namespace WebApplication1.Services
 
             matches.ForEach(delegate (MatchDto match)
             {
-                int playerParticipantId = GetPlayerParticipantId(match.participantsIdentities, accountId);
+                int playerParticipantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
 
-                int playerTeamId = GetPlayerTeamId(match.participants, playerParticipantId);
+                int playerTeamId = Retrieve.PlayerTeamId(match.participants, playerParticipantId);
 
                 dmgDealtByTeam.Add(ComputeDamageDealtByTeam(match.participants, playerTeamId, playerParticipantId));
 
@@ -35,7 +35,7 @@ namespace WebApplication1.Services
 
             matches.ForEach(delegate (MatchDto match)
             {
-                int playerParticipantId = GetPlayerParticipantId(match.participantsIdentities, accountId);
+                int playerParticipantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
 
                 dmgDealtByPlayer.Add(ComputeDamageDealtByPlayer(match.participants, playerParticipantId, totalGames));
             });
@@ -71,32 +71,5 @@ namespace WebApplication1.Services
 
             return dmgDealt;
         }
-
-
-        private int GetPlayerTeamId(List<ParticipantDto> participants, int participantId)
-        {
-            int teamId = 0;
-            participants.ForEach(delegate (ParticipantDto participant)
-            {
-                if (participant.participantId == participantId)
-                    teamId = participant.teamId;
-            });
-
-            return teamId;
-        }
-
-
-        private int GetPlayerParticipantId(List<ParticipantIdentityDto> participants, long accountId)
-        {
-            int playerParticipantId = 0;
-            participants.ForEach(delegate (ParticipantIdentityDto participant)
-            {
-                if (participant.player.accountId == accountId)
-                    playerParticipantId = participant.participantId;
-            });
-
-            return playerParticipantId;
-        }
-
     }
 }
