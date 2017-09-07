@@ -28,7 +28,36 @@ namespace WebApplication1.Services
 
         public DamageService ComputeDamageDealtByPlayer(List<MatchDto> matches, long accountId)
         {
-            return null;
+            DamageDealt dmgDealtByPlayer = new DamageDealt();
+
+            matches.ForEach(delegate (MatchDto match)
+            {
+                int playerParticipantId = GetPlayerParticipantId(match.participantsIdentities, accountId);
+
+                dmgDealtByPlayer = ComputeDamageDealtByPlayer(match.participants, playerParticipantId, matches.Count);
+            });
+
+            return dmgDealtByPlayer;
+        }
+
+
+        private DamageDealt ComputeDamageDealtByPlayer(List<ParticipantDto> participants, int participantId, int totalGames)
+        {
+            DamageDealt dmg = new DamageDealt();
+
+            participants.ForEach(delegate (ParticipantDto participant)
+            {
+                if(participant.participantId == participantId)
+                {
+                    dmg.averageDmgToChampions += participant.stats.totalDamageDealtToChampions;
+                    dmg.averageDmgToTurrets   += participant.stats.damageDealtToTurrets;
+                }
+            });
+
+            dmg.averageDmgToChampions /= totalGames;
+            dmg.averageDmgToTurrets   /= totalGames;
+
+            return dmg;
         }
 
 
