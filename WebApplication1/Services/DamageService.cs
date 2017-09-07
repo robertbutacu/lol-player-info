@@ -43,8 +43,8 @@ namespace WebApplication1.Services
                 dmgDealtByPlayer.averageDmgToTurrets   += currentGameDmg.averageDmgToTurrets;
             });
 
-            dmgDealtByPlayer.averageDmgToChampions /= totalGames;
-            dmgDealtByPlayer.averageDmgToTurrets /= totalGames;
+            Math.Round(dmgDealtByPlayer.averageDmgToChampions /= totalGames, 2);
+            Math.Round(dmgDealtByPlayer.averageDmgToTurrets /= totalGames, 2);
 
             return dmgDealtByPlayer;
         }
@@ -87,8 +87,8 @@ namespace WebApplication1.Services
         {
             int factor = isPlayerTeam ? 4 : 5;
 
-            dmgDealt.averageDmgToChampions /= (factor * totalGames);
-            dmgDealt.averageDmgToTurrets /= (factor * totalGames);
+            Math.Round(dmgDealt.averageDmgToChampions /= (factor * totalGames), 2);
+            Math.Round(dmgDealt.averageDmgToTurrets /= (factor * totalGames), 2);
 
             return dmgDealt;
         }
