@@ -106,7 +106,6 @@ namespace WebApplication1.Services
                     cs = participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled;
             });
 
-            System.Diagnostics.Debug.WriteLine("CS for current game " + cs);
             return cs;
         }
 
