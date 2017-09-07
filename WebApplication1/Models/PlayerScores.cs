@@ -48,5 +48,18 @@ namespace WebApplication1.Models
             this.averageDeaths  = Math.Round(this.averageDeaths  / totalGames, 2);
             this.averageKills   = Math.Round(this.averageKills   / totalGames, 2);
         }
+
+        public void ReplaceScores(PlayerScores playerScores)
+        {
+            this.averageKills = playerScores.averageKills;
+            this.averageDeaths = playerScores.averageDeaths;
+            this.averageAssists = playerScores.averageAssists;
+
+            this.averageKda = playerScores.averageKda;
+
+            this.averageCreeps = playerScores.averageCreeps;
+
+            this.averageCsPerMinute = playerScores.averageCsPerMinute;
+        }
     }
 }

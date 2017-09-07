@@ -26,30 +26,20 @@ namespace WebApplication1.Services
             if (matchesHistory == null)
                 return null;
 
-            var detailedGames = GetDetailedGames(matchesHistory.matches, region);
+            var detailedGames = Retrieve.DetailedGames(matchesHistory.matches, region);
 
             var playerSummary = new PlayerInformationDto
             {
                 name = summoner.name,
                 lanesPlayedCount = new LanesService().ComputeLanesPlayedCount(matchesHistory.matches),
                 playerScores = new ScoreService().ComputePlayerScore(detailedGames, summoner.accountId),
-                damageDealt = damageService.ComputeDamageDealtByPlayer(detailedGames, summoner.accountId),
+                gamesSummary = new GamesSummaryService().ComputeGamesSummary(detailedGames, summoner.accountId),
+                damageDealt = damageService.ComputeAverageDamageDealtByPlayer(detailedGames, summoner.accountId),
                 damageDealtByTeammates = damageService.ComputeDamageDealtByTeam(detailedGames, summoner.accountId, true),
                 damageDealtByEnemies = damageService.ComputeDamageDealtByTeam(detailedGames, summoner.accountId, false)
             };
 
             return playerSummary;
-        }
-
-        private List<MatchDto> GetDetailedGames(List<MatchReferenceDto> matchHistory, string region)
-        {
-            var detailedMatches = new List<MatchDto>();
-            matchHistory.ForEach(delegate (MatchReferenceDto match)
-            {
-                detailedMatches.Add(new Match().GetById(match.gameId, region));
-            });
-
-            return detailedMatches;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace WebApplication1.Services
         }
 
 
-        public DamageDealt ComputeDamageDealtByPlayer(List<MatchDto> matches, long accountId)
+        public DamageDealt ComputeAverageDamageDealtByPlayer(List<MatchDto> matches, long accountId)
         {
             DamageDealt dmgDealtByPlayer = new DamageDealt();
             int totalGames = matches.Count;
@@ -37,7 +37,7 @@ namespace WebApplication1.Services
             {
                 int playerParticipantId = Retrieve.ParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
 
-                dmgDealtByPlayer.Add(ComputeDamageDealtByPlayer(match.participants, playerParticipantId, totalGames));
+                dmgDealtByPlayer.Add(ComputeDamageDealtByPlayer(match.participants, playerParticipantId));
             });
 
             dmgDealtByPlayer.Normalize(matches.Count);
@@ -46,7 +46,7 @@ namespace WebApplication1.Services
         }
 
 
-        private DamageDealt ComputeDamageDealtByPlayer(List<ParticipantDto> participants, int participantId, int totalGames)
+        public DamageDealt ComputeDamageDealtByPlayer(List<ParticipantDto> participants, int participantId)
         {
             DamageDealt dmg = new DamageDealt();
 
@@ -57,6 +57,21 @@ namespace WebApplication1.Services
             });
 
             return dmg;
+        }
+
+        public DamageDealt GetHighestDamageDealerInTeam(List<ParticipantDto> participants, int teamId, int participantId)
+        {
+            DamageDealt highestInTeam = new DamageDealt();
+            participants.ForEach(delegate (ParticipantDto participant)
+            {
+                if (participant.stats.totalDamageDealtToChampions > highestInTeam.averageDmgToChampions &&
+                    participant.participantId != participantId &&
+                    participant.teamId == teamId)
+                    highestInTeam.ReplaceDamage(participant.stats.totalDamageDealtToChampions,
+                                                participant.stats.damageDealtToTurrets);
+            });
+
+            return highestInTeam;
         }
 
 

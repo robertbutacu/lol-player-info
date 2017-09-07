@@ -32,6 +32,16 @@ namespace WebApplication1.Models
             this.averageDmgToTurrets   += other.averageDmgToTurrets;
         }
 
+        public void ReplaceDamage(DamageDealt other)
+        {
+            this.averageDmgToChampions = other.averageDmgToChampions;
+            this.averageDmgToTurrets   = other.averageDmgToTurrets;
+        }
 
+        public void ReplaceDamage(double dmgToChampions, double dmgToTurrets)
+        {
+            this.averageDmgToChampions = dmgToChampions;
+            this.averageDmgToTurrets   = dmgToTurrets;
+        }
     }
 }

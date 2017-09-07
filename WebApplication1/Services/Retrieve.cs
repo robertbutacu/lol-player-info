@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebApplication1.LolAPIServices;
 using WebApplication1.Models;
 
 namespace WebApplication1.Services
@@ -30,6 +31,17 @@ namespace WebApplication1.Services
             });
 
             return teamId;
+        }
+
+        public static List<MatchDto> DetailedGames(List<MatchReferenceDto> matchHistory, string region)
+        {
+            var detailedMatches = new List<MatchDto>();
+            matchHistory.ForEach(delegate (MatchReferenceDto match)
+            {
+                detailedMatches.Add(new Match().GetById(match.gameId, region));
+            });
+
+            return detailedMatches;
         }
     }
 }

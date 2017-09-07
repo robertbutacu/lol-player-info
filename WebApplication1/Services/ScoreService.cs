@@ -41,7 +41,7 @@ namespace WebApplication1.Services
         }
 
 
-        private PlayerScores GetPlayerScoresForCurrentMatch(List<ParticipantDto> participants, int participantId)
+        public PlayerScores GetPlayerScoresForCurrentMatch(List<ParticipantDto> participants, int participantId)
         {
             PlayerScores playerScores = new PlayerScores();
             participants.ForEach(delegate (ParticipantDto participant)

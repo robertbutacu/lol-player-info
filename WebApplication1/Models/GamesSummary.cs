@@ -22,5 +22,12 @@ namespace WebApplication1.Models
             this.gamesCarried    += gamesSummary.gamesCarried;
             this.gamesGotCarried += gamesSummary.gamesGotCarried;
         }
+
+        public void Add(int gamesCarried, int gamesFed, int gamesGotCarried)
+        {
+            this.gamesCarried    += gamesCarried;
+            this.gamesFed        += gamesFed;
+            this.gamesGotCarried += gamesGotCarried;
+        }
     }
 }
