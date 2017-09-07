@@ -32,7 +32,7 @@ namespace WebApplication1.Services
             {
                 name = summoner.name,
                 lanesPlayedCount = new LanesService().ComputeLanesPlayedCount(matchesHistory.matches),
-
+                playerScores = new ScoreService().ComputePlayerScore(detailedGames, summoner.accountId),
                 damageDealt = damageService.ComputeDamageDealtByPlayer(detailedGames, summoner.accountId),
                 damageDealtByTeammates = damageService.ComputeDamageDealtByTeam(detailedGames, summoner.accountId, true),
                 damageDealtByEnemies = damageService.ComputeDamageDealtByTeam(detailedGames, summoner.accountId, false)
