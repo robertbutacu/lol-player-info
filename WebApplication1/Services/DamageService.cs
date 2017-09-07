@@ -8,7 +8,7 @@ namespace WebApplication1.Services
 {
     public class DamageService
     {
-        public DamageDealt GetDamageDealtByTeam(List<MatchDto> matches, long accountId, Boolean isPlayerTeam)
+        public DamageDealt ComputeDamageDealtByTeam(List<MatchDto> matches, long accountId, Boolean isPlayerTeam)
         {
             DamageDealt dmgDealtByTeam = new DamageDealt();
 
@@ -18,24 +18,33 @@ namespace WebApplication1.Services
 
                 int playerTeamId = GetPlayerTeamId(match.participants, playerParticipantId);
 
-                dmgDealtByTeam = ComputeDamageDealtByTeam(match.participants, playerTeamId, playerParticipantId);
-                dmgDealtByTeam = NormalizeDamage(dmgDealtByTeam, matches.Count, isPlayerTeam ? true : false);
+                var currentGameDmg = ComputeDamageDealtByTeam(match.participants, playerTeamId, playerParticipantId);
+                dmgDealtByTeam.averageDmgToTurrets   += currentGameDmg.averageDmgToTurrets;
+                dmgDealtByTeam.averageDmgToChampions += currentGameDmg.averageDmgToChampions;
             });
+
+            dmgDealtByTeam = NormalizeDamage(dmgDealtByTeam, matches.Count, isPlayerTeam ? true : false);
 
             return dmgDealtByTeam;
         }
 
 
-        public DamageService ComputeDamageDealtByPlayer(List<MatchDto> matches, long accountId)
+        public DamageDealt ComputeDamageDealtByPlayer(List<MatchDto> matches, long accountId)
         {
             DamageDealt dmgDealtByPlayer = new DamageDealt();
+            int totalGames = matches.Count;
 
             matches.ForEach(delegate (MatchDto match)
             {
                 int playerParticipantId = GetPlayerParticipantId(match.participantsIdentities, accountId);
 
-                dmgDealtByPlayer = ComputeDamageDealtByPlayer(match.participants, playerParticipantId, matches.Count);
+                var currentGameDmg = ComputeDamageDealtByPlayer(match.participants, playerParticipantId, totalGames);
+                dmgDealtByPlayer.averageDmgToChampions += currentGameDmg.averageDmgToChampions;
+                dmgDealtByPlayer.averageDmgToTurrets   += currentGameDmg.averageDmgToTurrets;
             });
+
+            dmgDealtByPlayer.averageDmgToChampions /= totalGames;
+            dmgDealtByPlayer.averageDmgToTurrets /= totalGames;
 
             return dmgDealtByPlayer;
         }
@@ -53,9 +62,6 @@ namespace WebApplication1.Services
                     dmg.averageDmgToTurrets   += participant.stats.damageDealtToTurrets;
                 }
             });
-
-            dmg.averageDmgToChampions /= totalGames;
-            dmg.averageDmgToTurrets   /= totalGames;
 
             return dmg;
         }
