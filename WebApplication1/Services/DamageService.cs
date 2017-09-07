@@ -18,12 +18,11 @@ namespace WebApplication1.Services
 
                 int playerTeamId = GetPlayerTeamId(match.participants, playerParticipantId);
 
-                var currentGameDmg = ComputeDamageDealtByTeam(match.participants, playerTeamId, playerParticipantId);
-                dmgDealtByTeam.averageDmgToTurrets   += currentGameDmg.averageDmgToTurrets;
-                dmgDealtByTeam.averageDmgToChampions += currentGameDmg.averageDmgToChampions;
+                dmgDealtByTeam.Add(ComputeDamageDealtByTeam(match.participants, playerTeamId, playerParticipantId));
+
             });
 
-            dmgDealtByTeam = NormalizeDamage(dmgDealtByTeam, matches.Count, isPlayerTeam ? true : false);
+            dmgDealtByTeam.Normalize(matches.Count * (isPlayerTeam ? 4 : 5));
 
             return dmgDealtByTeam;
         }
@@ -38,13 +37,10 @@ namespace WebApplication1.Services
             {
                 int playerParticipantId = GetPlayerParticipantId(match.participantsIdentities, accountId);
 
-                var currentGameDmg = ComputeDamageDealtByPlayer(match.participants, playerParticipantId, totalGames);
-                dmgDealtByPlayer.averageDmgToChampions += currentGameDmg.averageDmgToChampions;
-                dmgDealtByPlayer.averageDmgToTurrets   += currentGameDmg.averageDmgToTurrets;
+                dmgDealtByPlayer.Add(ComputeDamageDealtByPlayer(match.participants, playerParticipantId, totalGames));
             });
 
-            dmgDealtByPlayer.averageDmgToChampions = Math.Round(dmgDealtByPlayer.averageDmgToChampions / totalGames, 2);
-            dmgDealtByPlayer.averageDmgToTurrets   = Math.Round(dmgDealtByPlayer.averageDmgToTurrets   / totalGames, 2);
+            dmgDealtByPlayer.Normalize(matches.Count);
 
             return dmgDealtByPlayer;
         }
@@ -57,10 +53,7 @@ namespace WebApplication1.Services
             participants.ForEach(delegate (ParticipantDto participant)
             {
                 if(participant.participantId == participantId)
-                {
-                    dmg.averageDmgToChampions += participant.stats.totalDamageDealtToChampions;
-                    dmg.averageDmgToTurrets   += participant.stats.damageDealtToTurrets;
-                }
+                    dmg.Add(participant.stats.totalDamageDealtToChampions, participant.stats.damageDealtToTurrets);
             });
 
             return dmg;
@@ -73,22 +66,8 @@ namespace WebApplication1.Services
             participants.ForEach(delegate (ParticipantDto participant)
             {
                 if (participant.teamId == teamId && participant.participantId != playerParticipantId)
-                {
-                    dmgDealt.averageDmgToChampions += participant.stats.totalDamageDealtToChampions;
-                    dmgDealt.averageDmgToTurrets += participant.stats.damageDealtToTurrets;
-                }
+                    dmgDealt.Add(participant.stats.totalDamageDealtToChampions, participant.stats.damageDealtToTurrets);
             });
-
-            return dmgDealt;
-        }
-
-
-        private DamageDealt NormalizeDamage(DamageDealt dmgDealt, int totalGames, Boolean isPlayerTeam)
-        {
-            int factor = isPlayerTeam ? 4 : 5;
-
-            dmgDealt.averageDmgToChampions = Math.Round(dmgDealt.averageDmgToChampions / (factor * totalGames), 2);
-            dmgDealt.averageDmgToTurrets   = Math.Round(dmgDealt.averageDmgToTurrets   / (factor * totalGames), 2);
 
             return dmgDealt;
         }

@@ -32,8 +32,7 @@ namespace WebApplication1.Services
             {
                 int participantId = GetParticipantIdForCurrentMatch(match.participantsIdentities, accountId);
 
-                var currentScores = GetPlayerScoresForCurrentMatch(match.participants, participantId);
-                playerScores.AddScores(currentScores);
+                playerScores.AddScores(GetPlayerScoresForCurrentMatch(match.participants, participantId));
             });
 
             playerScores.NormalizeScores(matches.Count);
@@ -48,11 +47,7 @@ namespace WebApplication1.Services
             participants.ForEach(delegate (ParticipantDto participant)
             {
                 if(participant.participantId == participantId)
-                {
-                    playerScores.averageKills   = participant.stats.kills;
-                    playerScores.averageAssists = participant.stats.assists;
-                    playerScores.averageDeaths  = participant.stats.deaths;
-                }
+                    playerScores.AddScores(participant.stats.kills, participant.stats.deaths, participant.stats.assists);
             });
 
             return playerScores;

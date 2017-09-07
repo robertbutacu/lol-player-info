@@ -30,9 +30,16 @@ namespace WebApplication1.Models
 
         public void AddScores(PlayerScores currentPlayerScores)
         {
-            this.averageKills += currentPlayerScores.averageKills;
-            this.averageDeaths += currentPlayerScores.averageDeaths;
+            this.averageKills   += currentPlayerScores.averageKills;
+            this.averageDeaths  += currentPlayerScores.averageDeaths;
             this.averageAssists += currentPlayerScores.averageAssists;
+        }
+
+        public void AddScores(double averageKills, double averageDeaths, double averageAssists)
+        {
+            this.averageKills   += averageKills;
+            this.averageDeaths  += averageDeaths;
+            this.averageAssists += averageAssists;
         }
 
         public void NormalizeScores(int totalGames)

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace WebApplication1.Models
 {
@@ -12,5 +13,25 @@ namespace WebApplication1.Models
         public double averageDmgToTurrets;
 
         public DamageDealt() { }
+
+        public void Add(double dmgDealtToChampions, double dmgDealtToTurrets)
+        {
+            this.averageDmgToChampions += dmgDealtToChampions;
+            this.averageDmgToTurrets   += dmgDealtToTurrets;
+        }
+
+        public void Normalize(int totalGames)
+        {
+            this.averageDmgToChampions = Math.Round(this.averageDmgToChampions / totalGames, 2);
+            this.averageDmgToTurrets   = Math.Round(this.averageDmgToTurrets / totalGames, 2);
+        }
+
+        public void Add(DamageDealt other)
+        {
+            this.averageDmgToChampions += other.averageDmgToChampions;
+            this.averageDmgToTurrets   += other.averageDmgToTurrets;
+        }
+
+
     }
 }
