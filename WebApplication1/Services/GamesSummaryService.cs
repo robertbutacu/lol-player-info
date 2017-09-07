@@ -66,18 +66,13 @@ namespace WebApplication1.Services
 
         private Boolean HasCarried(DamageDealt byPlayer, DamageDealt highestInTeam, Boolean hasWon)
         {
-            System.Diagnostics.Debug.WriteLine(byPlayer.averageDmgToChampions + " " + highestInTeam.averageDmgToChampions * 1.45);
             return hasWon && byPlayer.averageDmgToChampions > (highestInTeam.averageDmgToChampions * 1.45);
         }
 
         private Boolean HasGottenCarried(PlayerScores playerScores, DamageDealt byPlayer, DamageDealt highestInTeam, Boolean hasWon)
         {
-            if (hasWon &&
-                !HasFed(playerScores) &&
-                (byPlayer.averageDmgToChampions * 1.30 < highestInTeam.averageDmgToChampions))
-                System.Diagnostics.Debug.WriteLine("Got carried in " + byPlayer.averageDmgToChampions + " " + highestInTeam.averageDmgToChampions);
             return hasWon && 
-                !HasFed(playerScores) && 
+                HasFed(playerScores) && 
                 (byPlayer.averageDmgToChampions * 1.30 < highestInTeam.averageDmgToChampions);
         }
     }

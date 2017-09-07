@@ -98,7 +98,7 @@ namespace WebApplication1.Services
             double cs = 0;
             participants.ForEach(delegate (ParticipantDto participant)
             {
-                if(participant.participantId == participantId)
+                if(participant.participantId == participantId && participant.timeline.creepsPerMinDeltas != null)
                     cs = participant.timeline.creepsPerMinDeltas.Values.Average();
             });
 
