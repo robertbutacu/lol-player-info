@@ -17,7 +17,10 @@ namespace WebApplication1.Controllers
             if (Array.IndexOf(Globals.REGIONS, region) != 1)
             {
                 var summoner = new Summoner().GetByName(summonerName, region);
-                return Ok(summoner);
+                if (summoner == null)
+                    return BadRequest();
+                else
+                    return Ok(summoner);
             }
             else
                 return BadRequest();

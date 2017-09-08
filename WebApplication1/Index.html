@@ -35,8 +35,13 @@
                 .done(function (data) {
                     document.getElementById("summonerInfo").innerHTML = "";
                     parseInformation(data);
+                })
+                .fail(function () {
+                    document.getElementById("summonerInfo").innerHTML = "";
+                    $('<li>', { text: "Summoner not found!" }).appendTo($('#summonerInfo'));
                 });
-        };
+        }
+
    
             /*
             name;
