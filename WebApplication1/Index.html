@@ -67,6 +67,32 @@
 
             appendAverageCs(data);
             appendScoreStats(data);
+            appendGamesSummary(data.gamesSummary);
+
+            appendDamageDealt(data.damageDealt);
+            appendDamageDealtByTeammates(data.damageDealtByTeammates);
+            appendDamageDealtByEnemies(data.damageDealtByEnemies);
+        }
+
+        function appendDamageDealt(damageDealt) {
+            $('<li>', { text: "Average damage to champions:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to turrets: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
+        }
+
+        function appendDamageDealtByTeammates(damageDealt) {
+            $('<li>', { text: "Average damage to champions by teammates:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to turrets by teammates: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
+        }
+
+        function appendDamageDealtByEnemies(damageDealt) {
+            $('<li>', { text: "Average damage to champions by enemies:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to turrets by enemies: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
+        }
+
+        function appendGamesSummary(gamesSummary) {
+            $('<li>', { text: "Games carried: " + gamesSummary.gamesCarried }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Games fed: " + gamesSummary.gamesFed }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Games got carried:" + gamesSummary.gamesGotCarried }).appendTo($('#summonerInfo'));
 
         }
 
