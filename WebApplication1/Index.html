@@ -33,9 +33,37 @@
             uri = uri + summoner + '&region=' + region;
             $.getJSON(uri)
                 .done(function (data) {
-                    document.getElementById("summonerInfo").innerHTML = data.damageDealtByTeammates.averageDmgToChampions;
+                    document.getElementById("summonerInfo").innerHTML = parseInformation(data);
                 });
         };
+        {
+            /*
+            name;
+
+            lanesPlayedCount { get; set; }
+             
+            playerScores { get; set; } averageCsPerMinute { get; set; } = 0;
+                                        averageCreeps { get; set; } = 0;
+                                        averageKda { get; set; } = 0;
+                                        averageKills { get; set; } = 0;
+                                        averageDeaths { get; set; } = 0;
+                                        averageAssists { get; set; } = 0;
+
+            gamesSummary { get; set; }gamesFed;
+                                      gamesCarried;
+                                      gamesGotCarried;
+
+
+            damageDealt { get; set; }averageDmgToChampions { get; set; } = 0;
+                                     averageDmgToTurrets { get; set; } = 0;
+
+            damageDealtByEnemies { get; set; }
+            damageDealtByTeammates { get; set; }
+            */
+        function parseInformation(data) {
+            var playerInformation = "Summoner name : " + data.summonerName;
+
+        }
     </script>
 </body>
 </html>
