@@ -112,19 +112,19 @@
             var playerInformation;
             switch (true) {
                 case (kills >= 0 && kills < 3):
-                    playerInformation = "Average kills per game : " + kills + " - extremely low - maybe support ?";
+                    playerInformation = "Kills per game : " + kills + " - extremely low - maybe support ?";
                     break;
                 case (kills >= 3 && kills < 6):
-                    playerInformation = "Average kills per game : " + kills + " - quite average.";
+                    playerInformation = "Kills per game : " + kills + " - quite average.";
                     break;
                 case (kills >= 5 && kills < 8):
-                    playerInformation = "Average kills per game : " + kills + " - slightly above average - keep it up!";
+                    playerInformation = "Kills per game : " + kills + " - slightly above average - keep it up!";
                     break;
                 case (kills >= 8 && kills < 10):
-                    playerInformation = "Average kills per game : " + kills + " - extremely high - probably carries a lot if his deaths are also low.";
+                    playerInformation = "Kills per game : " + kills + " - extremely high - probably carries a lot if his deaths are also low.";
                     break;
                 case (kills >= 10):
-                    playerInformation = "Average kills per game : " + kills + " - is he smurfing??? Could also be caused by certain game modes.";
+                    playerInformation = "Kills per game : " + kills + " - is he smurfing??? Could also be caused by certain game modes.";
                     break;
                 default:
                     playerInformation = "Not enough info about kills' count!";
@@ -137,19 +137,19 @@
             var playerInformation;
             switch (true) {
                 case (deaths >= 0 && deaths < 3):
-                    playerInformation = "Average deaths per game : " + deaths + " - abnormal low death count - smurfing or kda player.";
+                    playerInformation = "Deaths per game : " + deaths + " - abnormal low death count - smurfing or kda player.";
                     break;
                 case (deaths >= 3 && deaths < 5):
-                    playerInformation = "Average deaths per game : " + deaths + " - quite low death count - could be a player that plays very safe or a kda one.";
+                    playerInformation = "Deaths per game : " + deaths + " - quite low death count - could be a player that plays very safe or a kda one.";
                     break;
                 case (deaths >= 5 && deaths < 7):
-                    playerInformation = "Average deaths per game : " + deaths + " - average count - however, it's not that great if higher than 6.2 or so.";
+                    playerInformation = "Deaths per game : " + deaths + " - average count - however, it's not that great if higher than 6.2 or so.";
                     break;
                 case (deaths >= 7 && deaths < 9):
-                    playerInformation = "Average deaths per game : " + deaths + " - extremely high deaths' count! Maybe tilted?";
+                    playerInformation = "Deaths per game : " + deaths + " - extremely high deaths' count! Maybe tilted?";
                     break;
                 case (deaths >= 9):
-                    playerInformation = "Average deaths per game : " + deaths + " - quite the feeder. Dodging would be a good idea.";
+                    playerInformation = "Deaths per game : " + deaths + " - quite the feeder. Dodging would be a good idea.";
                     break;
                 default:
                     playerInformation = "Not enough information about deaths' count!"
@@ -162,19 +162,19 @@
             var playerInformation;
             switch (true) {
                 case (assists >= 0 && assists < 3):
-                    playerInformation = "Average assists per game : " + assists + " - extremely low - not a very good team player.";
+                    playerInformation = "Assists per game : " + assists + " - extremely low - not a very good team player.";
                     break;
                 case (assists >= 3 && assists < 5):
-                    playerInformation = "Average assists per game : " + assists + " - below average - likes to carry a lot?";
+                    playerInformation = "Assists per game : " + assists + " - below average - likes to carry a lot?";
                     break;
                 case (assists >= 5 && assists < 10):
-                    playerInformation = "Average assists per game : " + assists + " - average.";
+                    playerInformation = "Assists per game : " + assists + " - average.";
                     break;
                 case (assists >= 10 && assists < 15):
-                    playerInformation = "Average assists per game : " + assists + " - higher than average - a good team player, his kills might suffer.";
+                    playerInformation = "Assists per game : " + assists + " - higher than average - a good team player, his kills might suffer.";
                     break;
                 case (assists >= 15):
-                    playerInformation = "Average assists per game : " + assists + " - extremely high - support main?";
+                    playerInformation = "Assists per game : " + assists + " - extremely high - support main?";
                     break;
                 default:
                     playerInformation = "Not enough info about assists!";
