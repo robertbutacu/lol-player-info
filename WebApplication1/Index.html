@@ -11,11 +11,11 @@
         <input type="button" value="Search" onclick="retrieveInformation();" />
         <form>
             <select id="region">
-                <option>NA</option>
-                <option>EUW</option>
-                <option>OCE</option>
-                <option>EUNE</option>
-                <option>KR</option>
+                <option value="na1">NA</option>
+                <option value="euw1">EUW</option>
+                <option value="oce1">OCE</option>
+                <option value="eune1">EUNE</option>
+                <option value="kr1">KR</option>
             </select>
         </form>
         <p id="summonerInfo" />
@@ -25,8 +25,10 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
     <script>
         function retrieveInformation() {
-
-        }
+            var region = document.getElementById("region");
+            var value = region.value;
+            $('<li>', { text: value }).appendTo($('#summonerInfo'));
+        };
     </script>
 </body>
 </html>
