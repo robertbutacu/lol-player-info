@@ -7,14 +7,14 @@
 <body>
     <div>
         <h2>Search by Summoner Name</h2>
-        <input type="text" id="summoner" size="15" />
+        <input type="text" id="summoner" value="" size="15" />
         <input type="button" value="Search" onclick="retrieveInformation();" />
         <form>
             <select id="region">
                 <option value="na1">NA</option>
                 <option value="euw1">EUW</option>
                 <option value="oce1">OCE</option>
-                <option value="eune1">EUNE</option>
+                <option value="eun1">EUNE</option>
                 <option value="kr1">KR</option>
             </select>
         </form>
@@ -24,10 +24,17 @@
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
     <script>
+        var uri = 'api/player/?summonerName=';
         function retrieveInformation() {
-            var region = document.getElementById("region");
-            var value = region.value;
-            $('<li>', { text: value }).appendTo($('#summonerInfo'));
+            var region = document.getElementById("region").value;
+            var summoner = document.getElementById("summoner").value;
+            document.getElementById("summonerInfo").innerHTML = "";
+            $('<li>', { text: "We are currently waiting to retrieve data... Please wait!" }).appendTo($('#summonerInfo'));
+            uri = uri + summoner + '&region=' + region;
+            $.getJSON(uri)
+                .done(function (data) {
+                    document.getElementById("summonerInfo").innerHTML = data.damageDealtByTeammates.averageDmgToChampions;
+                });
         };
     </script>
 </body>
