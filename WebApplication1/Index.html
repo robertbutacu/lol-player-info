@@ -30,9 +30,10 @@
             var summoner = document.getElementById("summoner").value;
             document.getElementById("summonerInfo").innerHTML = "";
             $('<li>', { text: "We are currently waiting to retrieve data... Please wait!" }).appendTo($('#summonerInfo'));
-            uri = uri + summoner + '&region=' + region;
-            $.getJSON(uri)
+            var getInfo = uri + summoner + '&region=' + region;
+            $.getJSON(getInfo)
                 .done(function (data) {
+                    document.getElementById("summonerInfo").innerHTML = "";
                     parseInformation(data);
                 });
         };
@@ -65,17 +66,131 @@
             $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
 
             appendAverageCs(data);
+            appendScoreStats(data);
 
         }
 
+        function appendScoreStats(data) {
+            var kills = data.playerScores.averageKills;
+            var deaths = data.playerScores.averageDeaths;
+            var assists = data.playerScores.averageAssists;
+            var kda = data.playerScores.averageKda;
 
+            appendKills(kills);
+            appendDeaths(deaths);
+            appendAssists(assists);
+
+            appendKda(kda);
+        }
+
+        function appendKda(kda) {
+            var playerInformation;
+            switch (true) {
+                case (kda < 1):
+                    playerInformation = "Average kda: " + kda + " - huge feeder! Dodge";
+                    break;
+                case (kda >= 1 && kda < 2):
+                    playerInformation = "Average kda: " + kda + " - low kda - probably dies a lot or is not agressive enough to get kills/assists.";
+                    break;
+                case (kda >= 2 && kda < 3):
+                    playerInformation = "Average kda: " + kda + " - average kda.";
+                    break;
+                case (kda >= 3 && kda < 4):
+                    playerInformation = "Average kda: " + kda + " - higher than average - knows his champs/matchups/overall macro game.";
+                    break;
+                case (kda >= 4):
+                    playerInformation = "Average kda: " + kda + " - extremely high kda - smurfing or kda player. ( could be caused by other game modes )";
+                    break;
+                default:
+                    playerInformation = "Not enough info about kda!";
+                    break;
+            }
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
+        }
+
+        function appendKills(kills) {
+            var playerInformation;
+            switch (true) {
+                case (kills >= 0 && kills < 3):
+                    playerInformation = "Average kills per game : " + kills + " - extremely low - maybe support ?";
+                    break;
+                case (kills >= 3 && kills < 6):
+                    playerInformation = "Average kills per game : " + kills + " - quite average.";
+                    break;
+                case (kills >= 5 && kills < 8):
+                    playerInformation = "Average kills per game : " + kills + " - slightly above average - keep it up!";
+                    break;
+                case (kills >= 8 && kills < 10):
+                    playerInformation = "Average kills per game : " + kills + " - extremely high - probably carries a lot if his deaths are also low.";
+                    break;
+                case (kills >= 10):
+                    playerInformation = "Average kills per game : " + kills + " - is he smurfing??? Could also be caused by certain game modes.";
+                    break;
+                default:
+                    playerInformation = "Not enough info about kills' count!";
+                    break;
+            }
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
+        }
+
+        function appendDeaths(deaths) {
+            var playerInformation;
+            switch (true) {
+                case (deaths >= 0 && deaths < 3):
+                    playerInformation = "Average deaths per game : " + deaths + " - abnormal low death count - smurfing or kda player.";
+                    break;
+                case (deaths >= 3 && deaths < 5):
+                    playerInformation = "Average deaths per game : " + deaths + " - quite low death count - could be a player that plays very safe or a kda one.";
+                    break;
+                case (deaths >= 5 && deaths < 7):
+                    playerInformation = "Average deaths per game : " + deaths + " - average count - however, it's not that great if higher than 6.2 or so.";
+                    break;
+                case (deaths >= 7 && deaths < 9):
+                    playerInformation = "Average deaths per game : " + deaths + " - extremely high deaths' count! Maybe tilted?";
+                    break;
+                case (deaths >= 9):
+                    playerInformation = "Average deaths per game : " + deaths + " - quite the feeder. Dodging would be a good idea.";
+                    break;
+                default:
+                    playerInformation = "Not enough information about deaths' count!"
+                    break;
+            }
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
+        }
+
+        function appendAssists(assists) {
+            var playerInformation;
+            switch (true) {
+                case (assists >= 0 && assists < 3):
+                    playerInformation = "Average assists per game : " + assists + " - extremely low - not a very good team player.";
+                    break;
+                case (assists >= 3 && assists < 5):
+                    playerInformation = "Average assists per game : " + assists + " - below average - likes to carry a lot?";
+                    break;
+                case (assists >= 5 && assists < 10):
+                    playerInformation = "Average assists per game : " + assists + " - average.";
+                    break;
+                case (assists >= 10 && assists < 15):
+                    playerInformation = "Average assists per game : " + assists + " - higher than average - a good team player, his kills might suffer.";
+                    break;
+                case (assists >= 15):
+                    playerInformation = "Average assists per game : " + assists + " - extremely high - support main?";
+                    break;
+                default:
+                    playerInformation = "Not enough info about assists!";
+                    break;
+            }
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
+
+
+        }
 
         function appendAverageCs(data) {
             var cs = data.playerScores.averageCsPerMinute;
-
+            var playerInformation;
             switch (true) {
                 case (cs > 0 && cs < 3):
-                    playerInformation = "Average cs per minute per game: " + cs + " - Extremely low - maybe played a lot of support games?.";
+                    playerInformation = "Average cs per minute per game: " + cs + " - Extremely low - maybe played a lot of support games.";
                     break;
                 case (cs >= 3 && cs < 5):
                     playerInformation = "Average cs per minute per game: " + cs + " - below average - usual for a jungler ( a lot of jungling ?).";
