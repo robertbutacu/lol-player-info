@@ -8,7 +8,7 @@
     <div>
         <h2>Search by Summoner Name</h2>
         <input type="text" id="summoner" value="" size="15" />
-        <input type="button" value="Search" onclick="retrieveInformation();" />
+        <input type="button" value="Search" onclick="retrieveInformation()" />
         <form>
             <select id="region">
                 <option value="na1">NA</option>
@@ -33,10 +33,10 @@
             uri = uri + summoner + '&region=' + region;
             $.getJSON(uri)
                 .done(function (data) {
-                    document.getElementById("summonerInfo").innerHTML = parseInformation(data);
+                    parseInformation(data);
                 });
         };
-        {
+   
             /*
             name;
 
@@ -61,8 +61,40 @@
             damageDealtByTeammates { get; set; }
             */
         function parseInformation(data) {
-            var playerInformation = "Summoner name : " + data.summonerName;
+            var playerInformation = "Summoner name : " + data.name + '\n';
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
 
+            appendAverageCs(data);
+
+        }
+
+
+
+        function appendAverageCs(data) {
+            var cs = data.playerScores.averageCsPerMinute;
+
+            switch (true) {
+                case (cs > 0 && cs < 3):
+                    playerInformation = "Average cs per minute per game: " + cs + " - Extremely low - maybe played a lot of support games?.";
+                    break;
+                case (cs >= 3 && cs < 5):
+                    playerInformation = "Average cs per minute per game: " + cs + " - below average - usual for a jungler ( a lot of jungling ?).";
+                    break;
+                case (cs >= 5 && cs < 7):
+                    playerInformation = "Average cs per minute per game: " + cs + " - quite the average , nothing special. Could use more work!";
+                    break;
+                case (cs >= 7 && cs < 9):
+                    playerInformation = "Average cs per minute per game: " + cs + " - above average, almost impressive. Keep it up!";
+                    break;
+                case (cs >= 9):
+                    playerInformation = "Average cs per minute per game: " + cs + " - perfect CS.";
+                    break;
+                default:
+                    playerInformation = "Not enough info about cs per minute.";
+                    break;
+            }
+            playerInformation += "( average cs count per game => " + data.playerScores.averageCreeps + ".)";
+            $('<li>', { text: playerInformation }).appendTo($('#summonerInfo'));
         }
     </script>
 </body>
