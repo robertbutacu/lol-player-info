@@ -72,27 +72,35 @@
             appendDamageDealt(data.damageDealt);
             appendDamageDealtByTeammates(data.damageDealtByTeammates);
             appendDamageDealtByEnemies(data.damageDealtByEnemies);
+
+            appendLanes(data.lanesPlayedCount);
+        }
+
+        function appendLanes(lanesCount) {
+            Object.keys(lanesCount).forEach(function (currentKey) {
+                $('<li>', { text: currentKey + " : " + lanesCount[currentKey] }).appendTo($('#summonerInfo'));
+            });
         }
 
         function appendDamageDealt(damageDealt) {
-            $('<li>', { text: "Average damage to champions:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to champions: " + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
             $('<li>', { text: "Average damage to turrets: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
         }
 
         function appendDamageDealtByTeammates(damageDealt) {
-            $('<li>', { text: "Average damage to champions by teammates:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to champions by teammates: " + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
             $('<li>', { text: "Average damage to turrets by teammates: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
         }
 
         function appendDamageDealtByEnemies(damageDealt) {
-            $('<li>', { text: "Average damage to champions by enemies:" + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Average damage to champions by enemies: " + damageDealt.averageDmgToChampions }).appendTo($('#summonerInfo'));
             $('<li>', { text: "Average damage to turrets by enemies: " + damageDealt.averageDmgToTurrets }).appendTo($('#summonerInfo'));
         }
 
         function appendGamesSummary(gamesSummary) {
             $('<li>', { text: "Games carried: " + gamesSummary.gamesCarried }).appendTo($('#summonerInfo'));
             $('<li>', { text: "Games fed: " + gamesSummary.gamesFed }).appendTo($('#summonerInfo'));
-            $('<li>', { text: "Games got carried:" + gamesSummary.gamesGotCarried }).appendTo($('#summonerInfo'));
+            $('<li>', { text: "Games got carried: " + gamesSummary.gamesGotCarried }).appendTo($('#summonerInfo'));
 
         }
 
@@ -165,11 +173,13 @@
                 case (deaths >= 0 && deaths < 3):
                     playerInformation = "Deaths per game : " + deaths + " - abnormal low death count - smurfing or kda player.";
                     break;
-                case (deaths >= 3 && deaths < 5):
+                case (deaths >= 3 && deaths < 4):
                     playerInformation = "Deaths per game : " + deaths + " - quite low death count - could be a player that plays very safe or a kda one.";
                     break;
+                case (deaths >= 4 && deaths < 5):
+                    playerInformation = "Deaths per game : " + deaths + " - quite decent - good combo of agression and playing smart."
                 case (deaths >= 5 && deaths < 7):
-                    playerInformation = "Deaths per game : " + deaths + " - average count - however, it's not that great if higher than 6.2 or so.";
+                    playerInformation = "Deaths per game : " + deaths + " - slightly above average - however, it's even worse if it's higher than 6.2 or so.";
                     break;
                 case (deaths >= 7 && deaths < 9):
                     playerInformation = "Deaths per game : " + deaths + " - extremely high deaths' count! Maybe tilted?";
